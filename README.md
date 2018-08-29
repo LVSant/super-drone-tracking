@@ -1,4 +1,4 @@
-# Drone Tracking
+# Super Drone Tracking
 Drone Tracking is a Node.js project built with Hapi.js in Typescript for tracking drone positions around the globe.
 It provides Drone Actual Speed and Alerts if It's not moving.
 
@@ -33,7 +33,7 @@ The main logic is in the Tracking Module, where all drone management is coded.
 Also, there's a static array at **Repository** to store tracking data. 
 
 #### Tracking
-The file `tracking.controller.ts` is where the logic core is located.
+The file `tracking.controller.ts` is where the core logic is located.
 It all starts at the method `refreshTracking`.
 
 The algorithm searchs for an existing drone with given id.
@@ -66,7 +66,7 @@ Just run
 docker build . -t leonardo/super
 docker run --name drone -p 8080:3000 -d leonardo/super
 ```
-- Open the [Simulator](http://localhost:8080) and have fun
+- Open the [simulator](http://localhost:8080) and have fun
 ### Installing App
 - `npm install`
 ### Running tests
@@ -84,8 +84,3 @@ There are 7 tests in the app, that covers the following cases:
 - Post a new tracking that results in speed above zero
 - Post a new tracking that results in speed equals zero
 - Post trackings that results in alert by not moving in a ten seconds
-
-
-## Comments
-I really enjoyed building the project.
-It was hard to put an end, because coding it was so fun.
