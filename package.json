@@ -1,0 +1,44 @@
+{
+  "name": "super-drone-tracking",
+  "version": "1.0.0",
+  "description": "Hapi + TS drone tracking",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "analyse": "tslint --project .",
+    "prestart": "npm run build",
+    "start": "node dist/src/index.js",
+    "clean": "rm -rf dist",
+    "build": "npm run analyse && tsc -p tsconfig.json && npm run posbuild",
+    "posbuild": "cp src/template  -r dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@https://github.com/leonardoviveiros/super-drone-tracking.git"
+  },
+  "author": "Leonardo Viveiros",
+  "license": "ISC",
+  "dependencies": {
+    "boom": "7.2.0",
+    "geolib": "2.0.24",
+    "good": "8.1.1",
+    "good-console": "7.1.0",
+    "good-squeeze": "^5.1.0",
+    "hapi": "17.5.3",
+    "hapi-swagger": "9.1.1",
+    "inert": "5.1.0",
+    "joi": "13.6.0",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.4",
+    "vision": "5.3.3"
+  },
+  "devDependencies": {
+    "@types/hapi": "17.0.17",
+    "@types/mocha": "5.2.5",
+    "chai": "4.1.2",
+    "mocha": "5.2.0",
+    "ts-node": "7.0.1",
+    "tslint": "5.11.0",
+    "typescript": "3.0.1"
+  }
+}

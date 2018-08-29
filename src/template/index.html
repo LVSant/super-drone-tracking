@@ -1,0 +1,122 @@
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
+
+</head>
+
+<body ng-app="tracking" ng-controller="getData">
+  <div class="container">
+    <div class="row">
+      <div class="col align-self-center">
+        <div class="title">
+          <h1>{{title}}</h1>
+        </div>
+        <div class="card">
+          <h5 class="card-header">Drone Tracking Simulator</h5>
+          <div class="card-body" ng-if="drones.length !== 0">
+            <h5 class="card-title">Drones</h5>
+            <table class="card-text table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col"> Drone ID</th>
+                  <th scope="col"> Latitude</th>
+                  <th scope="col"> Longitude</th>
+                  <th scope="col"> Speed (KM/h)</th>
+                  <th scope="col"> Last movement</th>
+                  <th scope="col"> First record</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="drone in drones" scope="row" ng-class="{'alert': drone.alert}">
+                  <td>
+                    {{drone.droneId}}
+                  </td>
+                  <td>
+                    {{drone.lat | number:6}}
+                  </td>
+                  <td>
+                    {{drone.lon | number:6}}
+                  </td>
+                  <td>
+                    {{drone.speed | number:2 }}
+                  </td>
+                  <td>
+                    {{drone.lastMove | date:'medium' }}
+                  </td>
+                  <td>
+                    {{drone.createdAt | date:'medium' }}
+                  </td>
+                </tr>
+                <h4 ng-if="drones.length === 0">No drones flying around!</h4>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="w-100 pull-right p-3">
+          <a ng-if="!started" href="#" class="btn btn-primary" ng-click="startSimulator()">Start Simulation</a>
+          <a ng-if="started" href="#" class="btn btn-danger" ng-click="stopSimulator()">Stop Simulation</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card text-center fixed-bottom">
+    <div class="card-footer text-muted">
+      <b>Coded with &lt;3 by Leonardo Viveiros</b>
+    </div>
+  </div>
+  <script>
+    var app = angular.module('tracking', []);
+    app.controller('getData', function ($scope, $http, $interval, $location) {
+      $scope.drones = [];
+      $scope.title = 'Drone Tracking Simulator'
+      $scope.started = false
+      let interval;
+
+      function updateData($scope, $http) {
+        $http({
+          method: "POST",
+          url: "http://0.0.0.0:" + $location.port() + "/moveDrones"
+        });
+
+        $http({
+          method: "GET",
+          url: "http://0.0.0.0:" + $location.port() + "/tracking"
+        }).then(function mySuccess(response) {
+          $scope.drones = response.data;
+        }, function myError(response) {
+          $scope.error = response.statusText;
+        });
+      }
+
+      $scope.stopSimulator = function () {
+        $interval.cancel(interval);
+        $scope.started = false;
+      }
+
+      $scope.startSimulator = function () {
+        $scope.stopSimulator()
+        interval = $interval(function () { updateData($scope, $http) }, 1000);
+        $scope.started = true;
+      }
+
+    });
+  </script>
+  <style>
+    body {
+      background: #F7F7F7;
+    }
+
+    .alert {
+      background-color: #FFF29E !important;
+      font-weight: 800;
+    }
+
+    .title {
+      text-align: center;
+    }
+  </style>
+</body>
